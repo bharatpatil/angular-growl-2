@@ -16,6 +16,11 @@ present, you only have to provide keys as messages, angular-translate will trans
 
 ##Changelog
 
+**0.7.9** - 9 Jul 2016
+
+* global onClose() and onOpen() callbacks added, if growl level function exist it will be called first and then respective global callback will be called.
+
+
 **0.4.0** - 19th Nov 2013
 
 * updated dependency to angularJS 1.2.x, angular-growl does not work with 1.0.x anymore (BREAKING CHANGE)

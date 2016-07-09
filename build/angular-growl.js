@@ -1,7 +1,7 @@
 /**
- * angular-growl-v2 - v0.7.8 - 2015-10-25
+ * angular-growl-v2 - v0.7.9 - 2016-07-09
  * http://janstevens.github.io/angular-growl-2
- * Copyright (c) 2015 Marco Rinck,Jan Stevens,Silvan van Leeuwen; Licensed MIT
+ * Copyright (c) 2016 Marco Rinck,Jan Stevens,Silvan van Leeuwen; Licensed MIT
  */
 angular.module('angular-growl', []);
 angular.module('angular-growl').directive('growl', [function () {
@@ -92,7 +92,17 @@ angular.module('angular-growl').provider('growl', function () {
       error: null,
       warning: null,
       info: null
-    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true;
+    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true, _onClose = function () {
+    }, _onOpen = function () {
+    };
+  this.globalOnClose = function (onClose) {
+    _onClose = onClose;
+    return this;
+  };
+  this.globalOnOpen = function (onOpen) {
+    _onOpen = onOpen;
+    return this;
+  };
   this.globalTimeToLive = function (ttl) {
     if (typeof ttl === 'object') {
       for (var k in ttl) {
@@ -235,8 +245,18 @@ angular.module('angular-growl').provider('growl', function () {
           setText: function (newText) {
             message.text = $sce.trustAsHtml(String(newText));
           },
-          onclose: _config.onclose,
-          onopen: _config.onopen
+          onclose: function () {
+            if (typeof _config.onclose === 'function') {
+              _config.onclose();
+            }
+            _onClose();
+          },
+          onopen: function () {
+            if (typeof _config.onopen === 'function') {
+              _config.onopen();
+            }
+            _onOpen();
+          }
         };
         return broadcastMessage(message);
       }
