@@ -92,17 +92,7 @@ angular.module('angular-growl').provider('growl', function () {
       error: null,
       warning: null,
       info: null
-    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true, _onClose = function () {
-    }, _onOpen = function () {
-    };
-  this.globalOnClose = function (onClose) {
-    _onClose = onClose;
-    return this;
-  };
-  this.globalOnOpen = function (onOpen) {
-    _onOpen = onOpen;
-    return this;
-  };
+    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true;
   this.globalTimeToLive = function (ttl) {
     if (typeof ttl === 'object') {
       for (var k in ttl) {
@@ -249,13 +239,13 @@ angular.module('angular-growl').provider('growl', function () {
             if (typeof _config.onclose === 'function') {
               _config.onclose();
             }
-            _onClose();
+            $rootScope.$broadcast('growlClosed');
           },
           onopen: function () {
             if (typeof _config.onopen === 'function') {
               _config.onopen();
             }
-            _onOpen();
+            $rootScope.$broadcast('growlOpened');
           }
         };
         return broadcastMessage(message);

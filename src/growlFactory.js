@@ -21,32 +21,7 @@ angular.module("angular-growl").provider("growl", function() {
     _disableIcons = false,
     _reverseOrder = false,
     _disableCountDown = false,
-    _translateMessages = true,
-    _onClose = function() {
-
-    },
-    _onOpen = function() {
-
-    };
-  /**
-   * set global close function called after every growl is closed
-   *
-   * @param {function} onClose
-   */
-  this.globalOnClose = function(onClose) {
-    _onClose = onClose;
-    return this;
-  };
-
-  /**
-   * set global open function called after every growl is closed
-   *
-   * @param {function} onOpen
-   */
-  this.globalOnOpen = function(onOpen) {
-    _onOpen = onOpen;
-    return this;
-  };
+    _translateMessages = true;
 
   /**
    * set a global timeout (time to live) after which messages will be automatically closed
@@ -282,13 +257,13 @@ angular.module("angular-growl").provider("growl", function() {
           if (typeof _config.onclose === 'function') {
             _config.onclose();
           }
-          _onClose();
+          $rootScope.$broadcast('growlClosed');
         },
         onopen: function() {
           if (typeof _config.onopen === 'function') {
             _config.onopen();
           }
-          _onOpen();
+          $rootScope.$broadcast('growlOpened');
         }
       };
 
